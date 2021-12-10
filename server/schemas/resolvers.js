@@ -16,8 +16,8 @@ const resolvers = {
       throw new AuthenticationError("Not logged in");
     },
     // Test user no auth
-    user: async (parent, { username }) => {
-      return User.findOne({ username });
+    user: async () => {
+      return User.find();
     },
   },
 
