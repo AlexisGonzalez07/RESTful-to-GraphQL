@@ -38,9 +38,11 @@ const SearchBooks = () => {
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
-
+      console.log(response)
+      
       const { items } = await response.json();
-
+      console.log({items})
+      
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ['No author to display'],
@@ -67,21 +69,16 @@ const SearchBooks = () => {
     if (!token) {
       return false;
     }
-
-    try {
-      const response = await saveBook(bookToSave, token);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
+      try {
+        const { data } = await saveBook({
+          variables: { bookData: { ...bookToSave } },
+        });
+        console.log(savedBookIds);
+        setSavedBookIds([...savedBookIds, bookToSave.bookId]);
+      } catch (err) {
+        console.error(err);
       }
-
-      // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+    };
   return (
     <>
       <Jumbotron fluid className='text-light bg-dark'>
